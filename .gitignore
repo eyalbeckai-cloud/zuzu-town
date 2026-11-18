@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+tools/out/
+android/app/build/
+android/.gradle/
+android/build/
+ios/App/build/
+ios/App/Pods/
+ios/DerivedData/
+*.keystore
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+.env
