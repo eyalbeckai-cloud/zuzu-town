@@ -73,6 +73,15 @@ export const DISCOVERIES: Discovery[] = [
   D('vet', 'nap', '💤', 'Pet nap', 'תנומה לחיה', (e) => e.t === 'place' && e.on === 'petbed'),
   D('vet', 'exam', '🏥', 'Check-up', 'בדיקה אצל הווטרינרית', (e) => e.t === 'place' && e.on === 'examtable' && e.item.startsWith('pet:')),
   D('vet', 'hamster', '🐹', 'Feed the hamster', 'להאכיל את האוגר', (e) => e.t === 'feed' && e.who === 'pet:hamster'),
+  // supermarket
+  D('market', 'cart', '🛒', 'Fill the cart', 'למלא את העגלה', (e) => e.t === 'place' && e.on === 'cart' && !e.item.startsWith('char:') && !e.item.startsWith('pet:')),
+  D('market', 'ride', '🚗', 'Cart ride', 'נסיעה בעגלה', (e) => e.t === 'place' && e.on === 'cart' && e.item.startsWith('char:')),
+  D('market', 'pay', '💳', 'Pay at checkout', 'משלמים בקופה', (e) => e.t === 'tap' && e.def === 'register'),
+  D('market', 'scan', '🔊', 'Beep! Scan it', 'ביפ! סורקים', (e) => e.t === 'tap' && e.def === 'checkout'),
+  D('market', 'weigh', '⚖️', 'Weigh the fruit', 'לשקול פירות', (e) => e.t === 'place' && e.on === 'fruitscale'),
+  D('market', 'freezer', '🧊', 'Freezer', 'המקפיא', (e) => e.t === 'tap' && e.def === 'freezer'),
+  D('market', 'candy', '🍭', 'Candy machine', 'מכונת סוכריות', (e) => e.t === 'spawn' && e.from === 'candymachine'),
+  D('market', 'icecream', '🍨', 'Ice cream treat', 'פינוק גלידה', (e) => e.t === 'feed' && e.food === 'icecream'),
 ];
 
 export const discoveriesFor = (loc: string) => DISCOVERIES.filter((d) => d.loc === loc);

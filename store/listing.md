@@ -20,7 +20,7 @@ Age rating: 4+ / Everyone (PEGI 3)
 Five places to explore, a style studio, food to cook, pets to care for and lots of giggles. Made for kids 4-8. No ads, no data collection.
 
 **Keywords — App Store (100):**
-dollhouse,kids,toddler,pretend,role play,town,life,dress up,pets,vet,bakery,doll,house,girls,boys
+dollhouse,kids,toddler,pretend,role play,town,life,dress up,pets,vet,bakery,doll,house,shop
 
 **Description:**
 Welcome to Zuzu Town, a cozy pretend-play world where kids make up their own stories!
@@ -33,6 +33,8 @@ WHAT'S INSIDE
 • Park: swings, slide, sandbox, ice cream cart and an apple tree
 • Bakery*: bake bread and cakes, serve customers and ring up the register
 • Vet Clinic*: X-ray, scales, medicine and bubble baths for pets
+• Supermarket*: fill the cart, weigh the fruit, scan and pay at the checkout
+• 48 hidden surprises to discover, with a sticker album to fill
 • Style Studio: change hair, clothes, colors and accessories for every character
 • A backpack to carry friends and items from place to place
 • Turn off the lights for night time!
@@ -44,7 +46,7 @@ MADE FOR KIDS, TRUSTED BY PARENTS
 • Works offline
 • Purchases and settings are behind a parental gate
 
-*The Home, Bedroom, Park and Style Studio are free. The Bakery and Vet Clinic are unlocked with one optional one-time purchase. No subscriptions.
+*The Home, Bedroom, Park and Style Studio are free. The Bakery, Vet Clinic and Supermarket are unlocked with one optional one-time purchase. No subscriptions.
 
 ---
 
@@ -58,7 +60,7 @@ MADE FOR KIDS, TRUSTED BY PARENTS
 חמישה מקומות לגלות, סטודיו לעיצוב דמויות, אוכל לבשל, חיות לטפל בהן והמון צחוקים. לילדים בגילאי 4–8. בלי פרסומות ובלי איסוף מידע.
 
 **מילות מפתח — App Store (100):**
-בית בובות,ילדים,משחק דמיון,פעוטות,הלבשה,עיר,חיות,וטרינר,מאפייה,בובה,בנות,בנים,משחקים
+בית בובות,ילדים,משחק דמיון,פעוטות,הלבשה,עיר,חיות,וטרינר,מאפייה,סופרמרקט,בובה,משחקים
 
 **תיאור:**
 ברוכים הבאים לזוזו טאון, עולם דמיון חמים שבו הילדים ממציאים את הסיפורים בעצמם!
@@ -71,6 +73,8 @@ MADE FOR KIDS, TRUSTED BY PARENTS
 • הפארק: נדנדות, מגלשה, ארגז חול, עגלת גלידה ועץ תפוחים
 • המאפייה*: אופים לחמים ועוגות, מגישים ללקוחות ומצלצלים בקופה
 • מרפאת החיות*: רנטגן, משקל, תרופות ואמבטיית קצף לחיות
+• הסופרמרקט*: ממלאים עגלה, שוקלים פירות, סורקים ומשלמים בקופה
+• 48 הפתעות נסתרות לגלות, ואלבום מדבקות למלא
 • סטודיו סטייל: משנים לכל דמות תסרוקת, בגדים, צבעים ואקססוריז
 • תיק גב לקחת חברים וחפצים ממקום למקום
 • מכבים את האור ומגיע לילה!
@@ -82,7 +86,7 @@ MADE FOR KIDS, TRUSTED BY PARENTS
 • עובד בלי אינטרנט
 • רכישות והגדרות מוגנות בשאלה להורים
 
-*הבית, חדר השינה, הפארק וסטודיו הסטייל חינמיים. המאפייה ומרפאת החיות נפתחות ברכישה אחת, חד-פעמית ולא חובה. בלי מנויים.
+*הבית, חדר השינה, הפארק וסטודיו הסטייל חינמיים. המאפייה, מרפאת החיות והסופרמרקט נפתחים ברכישה אחת, חד-פעמית ולא חובה. בלי מנויים.
 
 ---
 
@@ -91,11 +95,11 @@ MADE FOR KIDS, TRUSTED BY PARENTS
 **App Store › App Privacy:** "Data Not Collected".
 **App Store › Age rating questionnaire:** all "None" → 4+. Made for Kids: Yes, age band 6–8.
 **App Store › Export compliance:** handled in Info.plist (no non-exempt encryption).
-**App Store › In-App Purchase:** type Non-Consumable, product ID `full_town`, reference name "Whole Town", display name EN "Whole Town" / HE "כל העיר", description EN "Unlock the Bakery and the Vet Clinic" / HE "פותחים את המאפייה ומרפאת החיות". Review screenshot: the unlock screen.
+**App Store › In-App Purchase:** type Non-Consumable, product ID `full_town`, reference name "Whole Town", display name EN "Whole Town" / HE "כל העיר", description EN "Unlock the Bakery, Vet Clinic and Supermarket" / HE "פותחים את המאפייה, מרפאת החיות והסופרמרקט". Review screenshot: the unlock screen.
 
 **Google Play › Data safety:** No data collected, no data shared. Encryption in transit: not applicable (no data). Users can't request deletion because nothing is collected.
 **Google Play › Target audience:** Ages 5 & under and 6–8. Appeals to children: yes. Ads: no.
 **Google Play › Content rating (IARC):** Category "Game"; answer No to violence, fear, sexuality, language, controlled substances, gambling, user interaction/chat, sharing location, purchases of digital goods = Yes.
-**Google Play › In-app products:** product ID `full_town`, name "Whole Town", description "Unlock the Bakery and the Vet Clinic", price $3.99 (Play converts to local prices).
+**Google Play › In-app products:** product ID `full_town`, name "Whole Town", description "Unlock the Bakery, Vet Clinic and Supermarket", price $3.99 (Play converts to local prices).
 **Google Play › App access:** All functionality available without special access.
 **Google Play › Ads:** No ads.

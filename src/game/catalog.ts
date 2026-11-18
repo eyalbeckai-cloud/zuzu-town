@@ -6,14 +6,15 @@ import { BEDROOM, BEDROOM_DEFS } from './locations/bedroom';
 import { PARK, PARK_DEFS } from './locations/park';
 import { BAKERY, BAKERY_DEFS } from './locations/bakery';
 import { VET, VET_DEFS } from './locations/vet';
+import { MARKET, MARKET_DEFS } from './locations/market';
 
 export const DEFS = new Map<string, ThingDef>();
-for (const d of [...ITEMS, ...HOME_DEFS, ...BEDROOM_DEFS, ...PARK_DEFS, ...BAKERY_DEFS, ...VET_DEFS]) {
+for (const d of [...ITEMS, ...HOME_DEFS, ...BEDROOM_DEFS, ...PARK_DEFS, ...BAKERY_DEFS, ...VET_DEFS, ...MARKET_DEFS]) {
   if (DEFS.has(d.id)) console.warn('dup def', d.id);
   DEFS.set(d.id, d);
 }
 
-export const LOCATIONS: LocationDef[] = [HOME, BEDROOM, PARK, BAKERY, VET];
+export const LOCATIONS: LocationDef[] = [HOME, BEDROOM, PARK, BAKERY, VET, MARKET];
 export const LOC = new Map(LOCATIONS.map((l) => [l.id, l]));
 
 /** v1 store product: unlocks every paid location */
@@ -33,6 +34,9 @@ export const ROSTER: Record<string, Look> = {
   vet: { size: 'adult', skin: 4, hair: 1, hairColor: 0, top: 0, topColor: 4, pattern: 0, bottom: 0, bottomColor: 4, shoes: 8, acc: 1 },
   max: { size: 'kid', skin: 5, hair: 7, hairColor: 0, top: 3, topColor: 5, pattern: 0, bottom: 0, bottomColor: 6, shoes: 3, acc: 4 },
   yuval: { size: 'kid', skin: 2, hair: 1, hairColor: 2, top: 0, topColor: 4, pattern: 2, bottom: 1, bottomColor: 7, shoes: 0, acc: 0 },
+  cashier: { size: 'adult', skin: 3, hair: 3, hairColor: 6, top: 0, topColor: 3, pattern: 0, bottom: 0, bottomColor: 9, shoes: 10, acc: 0 },
+  daniel: { size: 'kid', skin: 0, hair: 0, hairColor: 2, top: 2, topColor: 9, pattern: 0, bottom: 1, bottomColor: 4, shoes: 1, acc: 1 },
+  ella: { size: 'kid', skin: 5, hair: 4, hairColor: 7, top: 1, topColor: 11, pattern: 2, bottom: 0, bottomColor: 3, shoes: 6, acc: 2 },
   shira: { size: 'kid', skin: 3, hair: 5, hairColor: 1, top: 1, topColor: 5, pattern: 1, bottom: 0, bottomColor: 5, shoes: 2, acc: 3 },
 };
 

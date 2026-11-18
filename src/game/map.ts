@@ -41,6 +41,10 @@ const BUILD: Record<string, { w: number; h: number; s: () => string }> = {
     R(92, 108, 66, 66, 14, C.red) + Pf('M116 118 H134 V132 H148 V150 H134 V164 H116 V150 H102 V132 H116Z', '#ffffff') +
     R(40, 186, 52, 40, 8, C.sky, 3.5) + R(158, 186, 52, 40, 8, C.sky, 3.5) + R(102, 182, 46, 62, 8, C.mintD) +
     Ci(125, 52, 9, C.ol, 0) + Ci(110, 38, 5, C.ol, 0) + Ci(125, 32, 5, C.ol, 0) + Ci(140, 38, 5, C.ol, 0)) },
+  market: { w: 270, h: 230, s: () => svg(270, 230,
+    R(14, 60, 242, 166, 14, C.mintL) + R(6, 40, 258, 34, 12, C.green) + Ps('M40 57 H230', 6, '#ffffff', 0.85) +
+    R(30, 96, 92, 70, 10, C.sky, 3.5) + R(148, 96, 92, 70, 10, C.sky, 3.5) + R(100, 150, 70, 76, 10, C.glass) + Ps('M135 150 V226', 4) +
+    P('M196 4 H236 L230 30 H202Z', C.wood) + Ps('M202 4 Q216 -16 230 4', 4) + Ci(50, 214, 10, C.red, 3) + Ci(220, 214, 10, C.orange, 3)) },
   studio: { w: 240, h: 250, s: () => svg(240, 250,
     R(20, 70, 200, 174, 14, C.purpleL) + P('M8 76 Q120 0 232 76Z', C.purple) +
     R(40, 110, 70, 110, 10, C.sky, 3.5) + R(130, 120, 70, 124, 10, C.pink) + Ci(188, 182, 5, C.yellow, 3) +
@@ -103,6 +107,7 @@ export class MapScene implements Scene {
       mk('studio', 1020, 520, 'studio'),
       mk('bakery', 900, 760, 'loc'),
       mk('vet', 1320, 690, 'loc'),
+      mk('market', 560, 800, 'loc'),
     ];
     onProgress?.(1);
     sound.setMusic('park', 9);

@@ -383,6 +383,21 @@ export const SPECIALS: Record<string, Special> = {
     },
     attach(a, _c, _i, sc) { sound.play('scale'); const p = a.localToWorld(0, -60); sc.fx.emit('star', p.x, p.y - 60, 3, { color: '#ffd866' }); },
   },
+  fruitscale: {
+    draw(g, a, sc) {
+      const k = sc.world.childAt(a.id, 0);
+      const W: Record<string, string> = { watermelon: '3.20', apple: '0.20', banana: '0.15', carrot: '0.10', cheese: '0.40', milk: '1.00', juice: '1.00', bread: '0.75', pizza: '0.60', icecream: '0.30' };
+      const txt = k ? (W[k.def] ?? '0.25') + (k.look || k.pet ? '' : '') : '0.00';
+      g.save();
+      g.fillStyle = k ? '#bfffd9' : '#6f8a8a';
+      g.font = '800 19px Rubik, system-ui, sans-serif';
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      g.fillText(txt + ' kg', 0, -29);
+      g.restore();
+    },
+    attach(a, _c, _i, sc) { sound.play('scale'); const p = a.localToWorld(0, -62); sc.fx.emit('star', p.x, p.y - 50, 3, { color: '#ffd866' }); },
+  },
   bedlamp: {
     draw(g, a) {
       if (!a.e.s.on) return;

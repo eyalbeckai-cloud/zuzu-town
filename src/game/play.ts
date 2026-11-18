@@ -876,6 +876,7 @@ export class PlayScene {
   }
 
   putInPocket(a: Actor, cell: number): boolean {
+    if (a instanceof ThingActor && (a.d.slots?.length ?? 0) > 0) return false; // containers (e.g. the cart) stay in the world
     const items = this.world.pocket();
     let idx = cell >= 0 && !items[cell] ? cell : items.findIndex((x) => !x);
     if (idx < 0) return false;

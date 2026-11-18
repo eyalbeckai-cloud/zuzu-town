@@ -58,6 +58,15 @@ SCENES = [
       if (scl && ham) { sc.world.detach(ham.e); sc.attachTo(ham, scl, 0); }
       const vet = A.find(a => a.look && a.e.s.rid === 'vet'); if (vet) vet.setMood('happy', 99);
     """, 'Care for cute pets', 'מטפלים בחיות מתוקות'),
+    ('7b-market', '?loc=market&unlock=1', """
+      sc.camX = Math.min(600, sc.camMax()); const A = [...sc.actors.values()];
+      sc.tap(A.find(a => a.e.def === 'dairyfridge')); sc.tap(A.find(a => a.e.def === 'freezer'));
+      const cart = A.find(a => a.e.def === 'cart'); const d = A.find(a => a.look && a.e.s.rid === 'daniel');
+      if (cart && d) sc.attachTo(d, cart, 0);
+      for (const id of ['apple', 'milk']) { const e = sc.world.makeThing(id, 'market', 0, 0); const x = sc.addActorTree(e); if (cart && x) sc.attachTo(x, cart, id === 'apple' ? 1 : 2); }
+      const sc2 = A.find(a => a.e.def === 'fruitscale'); if (sc2) { const e = sc.world.makeThing('watermelon', 'market', 0, 0); const x = sc.addActorTree(e); if (x) sc.attachTo(x, sc2, 0); }
+      for (const a of A) if (a.look) a.setMood('happy', 99);
+    """, 'Go shopping!', 'יוצאים לקניות!'),
     ('8-studio', '?scene=studio', """
       app.scene.cat = 'topColor'; app.scene.refreshPanel();
     """, 'Design every character', 'מעצבים כל דמות', 26),
@@ -82,7 +91,7 @@ async def main():
                 await pg.goto(BASE + q + '&hidpi=1')
                 await pg.wait_for_function('window.__done === true', timeout=30000)
                 await pg.wait_for_timeout(1200)
-                await pg.evaluate("""(code) => { const app = window.__app; const sc = app.scene; app.world.flags.dragged = true; (window.__disc || []).forEach((d, i) => { if (i % 8 < 5) app.world.flags['d:' + d.id] = true; }); if (sc.tutorial !== undefined) sc.tutorial = null; new Function('app','sc', code)(app, sc); }""", js)
+                await pg.evaluate("""(code) => { const app = window.__app; const sc = app.scene; app.discover = () => {}; app.world.flags.dragged = true; (window.__disc || []).forEach((d, i) => { if (i % 8 < 5) app.world.flags['d:' + d.id] = true; }); if (sc.tutorial !== undefined) sc.tutorial = null; new Function('app','sc', code)(app, sc); }""", js)
                 await pg.wait_for_timeout(1600)
                 for lang, text in (('en', en), ('he', he)):
                     await pg.evaluate(CAP, [text, left])
