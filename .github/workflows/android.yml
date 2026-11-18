@@ -67,6 +67,12 @@ jobs:
           cp android/app/build/outputs/bundle/release/app-release.aab "out/zuzu-town-release-${{ github.run_number }}.aab"
           ls -la out
 
+      - name: Verify release signature
+        if: env.HAS_KEY == 'true'
+        run: |
+          keytool -printcert -jarfile out/*.aab | grep -E "Owner|SHA256:" | head -3
+          keytool -printcert -jarfile out/*.aab | grep -q "SHA256:" || (echo "AAB is not signed" && exit 1)
+
       - uses: actions/upload-artifact@v4
         with:
           name: android-build-${{ github.run_number }}
