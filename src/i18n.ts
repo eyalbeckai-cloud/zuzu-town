@@ -2,6 +2,10 @@ export type Lang = 'he' | 'en';
 
 const STR: Record<string, { en: string; he: string }> = {
   'app.name': { en: 'Zuzu Town', he: 'זוזו טאון' },
+  'album.title': { en: 'Sticker album', he: 'אלבום המדבקות' },
+  'album.found': { en: '{n} of {m} surprises found', he: 'נמצאו {n} מתוך {m} הפתעות' },
+  'album.all': { en: 'All surprises found!', he: 'מצאתם את כל ההפתעות!' },
+  'album.hint': { en: 'Play around to discover hidden surprises in every place!', he: 'שחקו בכל מקום כדי לגלות הפתעות נסתרות!' },
   'loc.home': { en: 'Home', he: 'הבית' },
   'loc.bedroom': { en: 'Bedroom', he: 'חדר השינה' },
   'loc.park': { en: 'Park', he: 'הפארק' },

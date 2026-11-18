@@ -47,7 +47,7 @@ export class Stage {
     const rotated = vh > vw * 1.08;
     const W = rotated ? vh : vw;
     const H = rotated ? vw : vh;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, /[?&]hidpi=1/.test(location.search) ? 3 : 2);
     if (W === this.cssW && H === this.cssH && dpr === this.dpr && rotated === this.rotated) return;
     this.rotated = rotated;
     this.cssW = W;

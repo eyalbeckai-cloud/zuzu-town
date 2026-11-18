@@ -14,6 +14,8 @@ interface AppLike {
 
 import { petArt } from '../art/characters';
 import { ITEMS } from '../game/things/items';
+import { DISCOVERIES, discoveriesFor, flagKey } from '../game/discover';
+import { LOCATIONS } from '../game/catalog';
 
 function heroImgs() {
   const u = (s: string) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s);
@@ -26,7 +28,7 @@ export class Overlay {
   app: AppLike;
   el: HTMLDivElement | null = null;
   private onPass: (() => void) | null = null;
-  private view: 'gate' | 'parents' | 'store' | null = null;
+  private view: 'gate' | 'parents' | 'store' | 'album' | null = null;
   private resetArmed = false;
   private storeLoc = '';
 
@@ -94,6 +96,32 @@ export class Overlay {
         }
       };
     });
+  }
+
+  showAlbum(cur: string) {
+    this.view = 'album';
+    const w = this.app.world;
+    const he = getLang() === 'he';
+    const locs = [...LOCATIONS].sort((a, b) => (a.id === cur ? -1 : b.id === cur ? 1 : 0));
+    const total = DISCOVERIES.filter((d) => w.flags[flagKey(d)]).length;
+    const sec = locs.map((L) => {
+      const list = discoveriesFor(L.id);
+      const n = list.filter((d) => w.flags[flagKey(d)]).length;
+      const lock = this.app.isLocked(L.id) ? ' 🔒' : '';
+      const cells = list.map((d) => {
+        const f = !!w.flags[flagKey(d)];
+        return `<div class="stk ${f ? 'on' : ''}"><span class="stk-i">${f ? d.icon : '?'}</span><span class="stk-l">${he ? d.he : d.en}</span></div>`;
+      }).join('');
+      return `<h3>${t('loc.' + L.id)}${lock} <span class="stk-n">⭐ ${n}/${list.length}</span></h3><div class="stk-grid">${cells}</div>`;
+    }).join('');
+    const el = this.shell(`
+      <button class="ov-x" aria-label="${t('parents.close')}">✕</button>
+      <h2>📒 ${t('album.title')}</h2>
+      <p>${t('album.found', { n: total, m: DISCOVERIES.length })}</p>
+      <p class="stk-hint">${t('album.hint')}</p>
+      <div class="stk-scroll">${sec}</div>`, 'album');
+    el.querySelector('.ov-x')!.addEventListener('click', () => this.close());
+    sound.play('whoosh');
   }
 
   openParents() {

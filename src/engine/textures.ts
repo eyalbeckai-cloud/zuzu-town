@@ -197,6 +197,13 @@ export class TexCache {
   }
 
   size() { return this.map.size; }
+
+  /** approximate bytes held by rasterized textures (backing stores + masks) */
+  bytes() {
+    let b = 0;
+    for (const t of this.map.values()) b += t.c.width * t.c.height * 4 + (t.mask ? t.mask.length : 0);
+    return b;
+  }
 }
 
 export const textures = new TexCache();

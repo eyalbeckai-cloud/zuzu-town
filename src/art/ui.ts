@@ -20,6 +20,9 @@ export const UI_ICONS: Record<string, { w: number; h: number; s: () => string; o
   check: { w: 100, h: 100, s: () => btn(Ps('M-20 0 L-6 14 L22 -16', 12) + Ps('M-20 0 L-6 14 L22 -16', 6, '#ffffff'), C.green) },
   star: { w: 60, h: 60, s: () => svg(60, 60, `<path d="${starPath(30, 31, 26)}" fill="${C.yellow}" stroke="${C.ol}" stroke-width="4" stroke-linejoin="round"/>`) },
   heart: { w: 60, h: 60, s: () => svg(60, 60, `<path d="${heartPath(30, 30, 22)}" fill="${C.rose}" stroke="${C.ol}" stroke-width="4" stroke-linejoin="round"/>`) },
+  hand: { w: 90, h: 110, s: () => svg(90, 110,
+    P('M30 50 V16 Q30 6 39 6 Q48 6 48 16 V46 L50 40 Q52 32 60 33 Q67 35 66 44 L65 50 Q68 44 75 46 Q82 49 80 58 L78 64 Q81 60 86 63 Q90 67 88 74 L82 92 Q76 106 58 106 H44 Q30 106 22 94 L8 72 Q4 64 11 60 Q18 57 24 64 L30 72Z', '#ffffff', 4.5) +
+    Ps('M48 46 V60 M65 50 V62 M78 64 V70', 3.5, C.ol, 0.6) + Rf(34, 12, 8, 14, 4, C.pinkL, 0.9)) },
   hanger: { w: 100, h: 100, s: () => btn(Ps('M0 -26 Q0 -34 7 -34 Q14 -34 14 -27 Q14 -21 0 -16 L-28 8 H28 L0 -16', 5) + R(-24, 8, 48, 22, 8, C.pink, 3.5), C.yellow) },
 };
 

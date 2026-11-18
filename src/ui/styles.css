@@ -93,3 +93,17 @@ button { font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: tra
 .st-btn { width: 14vmin; height: 14vmin; border: none; background: none; padding: 0; }
 .st-btn img { width: 100%; height: 100%; filter: drop-shadow(0 0.6vmin 0 rgba(69,54,90,.25)); }
 .st-btn:active { transform: scale(.92); }
+
+/* sticker album */
+.ov.album .ov-card { max-width: min(860px, 94vw); width: 94vw; max-height: 88vh; display: flex; flex-direction: column; }
+.stk-hint { font-size: 15px !important; opacity: .75; }
+.stk-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 2px 4px 8px; }
+.stk-scroll h3 { margin: 14px 0 8px; font-size: 21px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.stk-n { font-size: 17px; font-weight: 800; background: #fff3b0; border: 3px solid #45365a; border-radius: 999px; padding: 1px 10px; }
+.stk-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; }
+.stk { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.stk-i { width: 64px; height: 64px; border-radius: 50%; border: 4px dashed #b9aecb; background: #f3eff8; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; color: #b9aecb; font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",Rubik,sans-serif; }
+.stk.on .stk-i { border: 4px solid #45365a; background: #fff3b0; color: inherit; box-shadow: 0 4px 0 rgba(69,54,90,.25); font-size: 34px; }
+.stk-l { font-size: 12.5px; font-weight: 700; line-height: 1.15; opacity: .55; }
+.stk.on .stk-l { opacity: 1; }
+@media (max-height: 500px) { .stk-i { width: 54px; height: 54px; font-size: 26px; } .stk.on .stk-i { font-size: 29px; } }

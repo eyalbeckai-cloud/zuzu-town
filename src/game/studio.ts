@@ -240,7 +240,9 @@ export class StudioScene implements Scene {
       case 'topColor': case 'bottomColor': case 'shoes': return sw(CLOTH[v]);
       case 'hair': case 'acc': {
         const a = headArt({ ...look, [cat]: v });
-        return a.svg;
+        const r = (look.size === 'baby' ? 50 : look.size === 'kid' ? 56 : 55);
+        const face = `<g transform="translate(${a.ax} ${a.ay})"><ellipse cx="${-r * 0.36}" cy="${r * 0.06}" rx="${r * 0.11}" ry="${r * 0.14}" fill="#3a2a48"/><ellipse cx="${r * 0.36}" cy="${r * 0.06}" rx="${r * 0.11}" ry="${r * 0.14}" fill="#3a2a48"/><path d="M${-r * 0.17} ${r * 0.41} Q0 ${r * 0.55} ${r * 0.17} ${r * 0.41}" fill="none" stroke="#45365a" stroke-width="${r * 0.065}" stroke-linecap="round"/></g>`;
+        return a.svg.replace('</svg>', face + '</svg>');
       }
       case 'top': case 'pattern': case 'bottom': {
         const a = bodyArt({ ...look, [cat]: v, size: look.size === 'baby' ? 'kid' : look.size }, 'stand');

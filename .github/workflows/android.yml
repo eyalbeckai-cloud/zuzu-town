@@ -1,0 +1,85 @@
+name: Android build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    env:
+      HAS_KEY: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Prepare upload key
+        if: env.HAS_KEY == 'true'
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/upload.p12"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/upload.p12" >> "$GITHUB_ENV"
+          echo "ANDROID_KEY_ALIAS=zuzu-upload" >> "$GITHUB_ENV"
+
+      - name: Gradle build (test APK + release AAB)
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 1.0.${{ github.run_number }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace assembleDebug bundleRelease
+
+      - name: Collect outputs
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/debug/app-debug.apk out/zuzu-town-test.apk
+          cp android/app/build/outputs/bundle/release/app-release.aab "out/zuzu-town-release-${{ github.run_number }}.aab"
+          ls -la out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-build-${{ github.run_number }}
+          path: out/
+
+      - name: Publish test APK (stable download link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-test
+          name: Android test build
+          prerelease: true
+          make_latest: false
+          files: out/zuzu-town-test.apk
+          body: |
+            Latest Android test build (run ${{ github.run_number }}).
+            Open this page on an Android phone, tap zuzu-town-test.apk and allow "install unknown apps".

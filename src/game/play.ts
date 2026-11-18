@@ -12,6 +12,7 @@ import { HAND, HEAD } from './types';
 import { SPECIALS } from './specials';
 import { haptic } from '../platform';
 import { drawFace } from '../art/characters';
+import type { DEv } from './discover';
 
 export interface PEvt { id: number; sx: number; sy: number; wx: number; wy: number }
 
@@ -20,6 +21,7 @@ export interface AppLike {
   stage: Stage;
   goto(loc: string): void;
   isLocked(loc: string): boolean;
+  discover?(e: DEv, loc: string, wx: number, wy: number): void;
 }
 
 interface Drag {
@@ -60,6 +62,7 @@ export class PlayScene {
   ready = false;
   nightCanvas: HTMLCanvasElement | null = null;
   swing = new Map<string, { a: number[]; v: number[] }>();
+  tutorial: { from: string; to: string; t: number } | null = null;
 
   constructor(app: AppLike, loc: LocationDef) {
     this.app = app;
@@ -84,7 +87,67 @@ export class PlayScene {
     onProgress?.(1);
     this.syncRadio();
     sound.setMusic(this.loc.music, this.loc.seed);
+    this.setupTutorial();
     this.ready = true;
+  }
+
+  idOf(a: Actor): string {
+    if (a instanceof CharActor) return 'char:' + String(a.e.s.rid ?? a.look.size);
+    if (a instanceof PetActor) return 'pet:' + a.kind;
+    return a.e.def;
+  }
+
+  emitEv(e: DEv, at?: Actor) {
+    const c = at ? at.center() : { x: this.camX + this.stage.view.w / 2, y: this.stage.view.y + 300 };
+    this.app.discover?.(e, this.loc.id, c.x, c.y);
+  }
+
+  setupTutorial() {
+    if (this.world.flags.dragged) return;
+    let food: Actor | null = null, eater: Actor | null = null;
+    const vx0 = this.camX + 120, vx1 = this.camX + this.stage.view.w - 120;
+    const rootX = (e: Ent): number => { let r = e; while (r.p) { const q = this.world.get(r.p); if (!q) break; r = q; } return r.x; };
+    const vis = [...this.actors.values()].filter((a) => { const x = rootX(a.e); return x > vx0 && x < vx1; });
+    food = vis.find((a) => a instanceof ThingActor && a.d.tags.includes('food')) ?? null;
+    if (food) {
+      const fx = rootX(food.e);
+      let best = Infinity;
+      for (const a of vis) {
+        if (!(a instanceof CharActor) || a.e.p) continue;
+        const d = Math.abs(rootX(a.e) - fx);
+        if (d < best) { best = d; eater = a; }
+      }
+    }
+    if (food && eater) this.tutorial = { from: food.id, to: eater.id, t: 0 };
+  }
+
+  drawTutorial(g: CanvasRenderingContext2D) {
+    const tu = this.tutorial;
+    if (!tu) return;
+    const A = this.actors.get(tu.from), B = this.actors.get(tu.to);
+    const hand = textures.get('ui:hand');
+    if (!A || !B || !hand || !(B instanceof CharActor)) return;
+    tu.t = (tu.t + 1 / 60) % 2.6;
+    const t = tu.t;
+    const a = A.center(), b = B.headWorld();
+    let k = 0, alpha = 1, press = 0;
+    if (t < 0.35) { k = 0; alpha = t / 0.35; }
+    else if (t < 0.55) { k = 0; press = (t - 0.35) / 0.2; }
+    else if (t < 1.65) { k = ease.inOutQuad((t - 0.55) / 1.1); press = 1; }
+    else if (t < 1.9) { k = 1; press = 1 - (t - 1.65) / 0.25; }
+    else { k = 1; alpha = Math.max(0, 1 - (t - 1.9) / 0.4); }
+    const x = a.x + (b.x - a.x) * k, y = a.y + (b.y - a.y) * k;
+    g.save();
+    g.globalAlpha = alpha;
+    if (press > 0.3 && k > 0) {
+      const t2 = A instanceof ThingActor ? A.tex() : undefined;
+      if (t2) { g.save(); g.globalAlpha = alpha * 0.8; g.translate(x, y + 30); drawTex(g, t2); g.restore(); }
+    }
+    g.translate(x + 26, y + 40);
+    const s = 1.1 - press * 0.12;
+    g.scale(s, s);
+    drawTex(g, hand);
+    g.restore();
   }
 
   exit() {
@@ -378,6 +441,7 @@ export class PlayScene {
     }
     this.fx.draw(g);
     this.drawNight(g);
+    this.drawTutorial(g);
     // dragged on top
     for (const d of this.drags.values()) {
       if (d.actor && d.started) this.drawTree(g, d.actor);
@@ -687,6 +751,8 @@ export class PlayScene {
     }
     a.dragging = true;
     a.rot = 0;
+    if (this.tutorial) { this.tutorial = null; }
+    this.world.flags.dragged = true;
     this.tweens.to(a, { lift: 10, sx: 1.06, sy: 1.06 }, 0.12, ease.outBack);
     if (a instanceof CharActor) { a.setMood('surprise', 0.35); sound.play('giggle', a.look.size === 'baby' ? 1.3 : a.look.size === 'adult' ? 0.8 : 1.05); }
     else if (a instanceof PetActor) { a.setMood('happy', 0.4); this.petSound(a); }
@@ -780,6 +846,7 @@ export class PlayScene {
     const sp = parent instanceof ThingActor ? SPECIALS[parent.d.id] : undefined;
     sp?.attach?.(parent as ThingActor, a, i, this);
     haptic('light');
+    this.emitEv({ t: 'place', item: this.idOf(a), on: parent.e.def, pose }, a);
   }
 
   fall(a: Actor) {
@@ -855,6 +922,7 @@ export class PlayScene {
       this.fall(food);
       return;
     }
+    this.emitEv({ t: 'feed', who: this.idOf(t), food: food.e.def }, t);
     if (tags.includes('drink')) {
       sound.play('gulp');
       this.fx.emit('drop', h.x, h.y + 10, 4, { color: '#bfe8ff' });
@@ -899,6 +967,7 @@ export class PlayScene {
     this.world.attach(item.e, t.e, HEAD);
     t.setMood('happy', 1.2);
     sound.play('sparkle');
+    this.emitEv({ t: 'wear', who: this.idOf(t), item: item.e.def }, t);
     const h = t.headWorld();
     this.fx.emit('sparkle', h.x, h.y - 40, 7);
     this.world.touch();
@@ -908,12 +977,14 @@ export class PlayScene {
     this.world.attach(item.e, t.e, HAND);
     t.setMood('happy', 0.8);
     sound.play('pop');
+    this.emitEv({ t: 'hold', who: this.idOf(t), item: item.e.def }, t);
     this.world.touch();
   }
 
   brush(t: CharActor | PetActor, item: ThingActor) {
     const h = t.headWorld();
     sound.play('brush');
+    this.emitEv({ t: 'brush', who: this.idOf(t), item: item.e.def }, t);
     this.fx.emit('bubble', h.x, h.y, 6);
     this.fx.emit('sparkle', h.x, h.y - 30, 4);
     t.setMood('happy', 1.2);
@@ -925,6 +996,7 @@ export class PlayScene {
   heal(t: PetActor, item: ThingActor) {
     const h = t.headWorld();
     sound.play('heart');
+    this.emitEv({ t: 'heal', who: this.idOf(t), item: item.e.def }, t);
     this.fx.emit('heart', h.x, h.y - 40, 5);
     t.setMood('happy', 1.5);
     item.e.x = h.x + 60;
@@ -965,7 +1037,7 @@ export class PlayScene {
     if (!(a instanceof ThingActor)) return;
     const d = a.d;
     const sp = SPECIALS[d.id];
-    if (sp?.tap && sp.tap(a, this)) { this.world.touch(); return; }
+    if (sp?.tap && sp.tap(a, this)) { this.world.touch(); this.emitEv({ t: 'tap', def: d.id, on: a.e.s.on as boolean | undefined }, a); return; }
     if (d.door) {
       sound.play(d.sound ?? 'door');
       this.wobble(a, 0.05);
@@ -1032,6 +1104,7 @@ export class PlayScene {
         }
     }
     this.world.touch();
+    this.emitEv({ t: 'tap', def: d.id, on: s.on as boolean | undefined }, a);
   }
 
   wobble(a: Actor, k: number) {
@@ -1086,6 +1159,7 @@ export class PlayScene {
     sound.play(d.sound ?? 'pop');
     this.wobble(a, 0.06);
     this.fx.emit('sparkle', p.x, p.y, 6);
+    this.emitEv({ t: 'spawn', from: d.id, item: id }, a);
     const tx = p.x + rand(-90, 90) + (d.spawnAt?.x ?? 0) * 0;
     const ty = clamp(this.loc.floor.top + rand(20, 120), this.loc.floor.top, this.loc.floor.bottom);
     const up = p.y - 90;
@@ -1117,6 +1191,7 @@ export class PlayScene {
         this.fx.emit('star', p.x, p.y - 30, 3, { color: '#ffd866' });
         sound.play('ding');
         this.world.touch();
+        this.emitEv({ t: 'cook', to: c.to }, a);
       }
     }
   }

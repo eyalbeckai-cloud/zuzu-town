@@ -21,6 +21,7 @@ export interface SaveData {
   cam: Record<string, number>;
   settings: Settings;
   owned: string[];
+  flags?: Record<string, boolean>;
 }
 
 export class World {
@@ -30,6 +31,7 @@ export class World {
   cam: Record<string, number> = {};
   settings: Settings = { music: true, sfx: true, lang: 'auto' };
   owned = new Set<string>();
+  flags: Record<string, boolean> = {};
   seq = 1;
   dirty = false;
   private kidsIdx: Map<string, Ent[]> | null = null;
@@ -186,6 +188,7 @@ export class World {
       cam: this.cam,
       settings: this.settings,
       owned: [...this.owned],
+      flags: this.flags,
     };
     return JSON.stringify(d);
   }
@@ -208,6 +211,7 @@ export class World {
       w.cam = d.cam || {};
       w.settings = { ...w.settings, ...(d.settings || {}) };
       w.owned = new Set(d.owned || []);
+      w.flags = d.flags || {};
     } catch (e) {
       console.warn('save load failed', e);
       return new World();
